@@ -197,20 +197,20 @@ class Channel:
     """The insecure network between Alice and Bob."""
     mallory: Mallory | None = None
     corrupt: bool = False
-    _corrupted: bool = field(default=False, init=False)
+    corrupted: bool = field(default=False, init=False)
 
     def transmit(self, packet):
         if isinstance(packet, MessagePacket):
             say("CHANNEL", f"seq={packet.seq} nonce={short_hex(packet.nonce)} ciphertext={short_hex(packet.ciphertext)}")
         if self.mallory is not None:
             packet = self.mallory.intercept(packet)
-        if self.corrupt and not self._corrupted and isinstance(packet, MessagePacket):
+        if self.corrupt and not self.corrupted and isinstance(packet, MessagePacket):
             packet = self._flip_one_bit(packet)
         return packet
 
     def _flip_one_bit(self, packet: MessagePacket) -> MessagePacket:
         """Flip the least significant bit of the first ciphertext byte, once."""
-        self._corrupted = True
+        self.corrupted = True
         ciphertext = bytes([packet.ciphertext[0] ^ 0x01]) + packet.ciphertext[1:]
         say("CHANNEL", f"1 bit flipped in transit: {short_hex(packet.ciphertext, 4)} -> {short_hex(ciphertext, 4)}")
         return replace(packet, ciphertext=ciphertext)

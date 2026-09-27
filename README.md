@@ -59,6 +59,26 @@ pip install cryptography
 python demo.py --mitm
 ```
 
+### Graphical interface
+
+```sh
+uv run gui.py
+```
+
+The window shows Alice, Bob and Mallory on a diagram, animates each packet along the channel and lists the keys
+each party holds as it acquires them (the RSA key Alice receives is colored by its real owner, so a swapped key
+shows up in red). Press `1`–`4` to run the four scenarios, or set the switches on the left and press Enter.
+
+On Linux, the Python builds that uv downloads ship a Tk without font rendering, so the window falls back to a
+bitmap font. Install the system Tk and run the GUI with the system Python instead:
+
+```sh
+sudo pacman -S tk                 # Arch; Debian/Ubuntu: sudo apt install python3-tk
+uv run --python /usr/bin/python3 gui.py
+```
+
+Windows and macOS need nothing extra.
+
 ### Options
 
 | Option | Effect |
@@ -91,6 +111,7 @@ and the four scenarios end to end.
 | File | Contents |
 |---|---|
 | `demo.py` | command line and scenario runner |
+| `gui.py` | Tkinter interface with the animated diagram |
 | `parties.py` | Alice, Bob, Mallory, the channel and the packets they exchange |
 | `primitives.py` | cryptographic operations and their parameters |
 | `output.py` | colored narration |

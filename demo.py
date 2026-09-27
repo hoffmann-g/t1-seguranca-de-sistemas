@@ -59,11 +59,11 @@ def run(
         bob_rejected=bob.rejected,
         mallory_read=list(mallory.read) if mallory else [],
     )
-    _summarize(result, messages, mitm)
+    summarize(result, messages, mitm)
     return result
 
 
-def _summarize(result: Result, sent: list[str], mitm: bool):
+def summarize(result: Result, sent: list[str], mitm: bool):
     heading("Summary")
     if not result.handshake_ok:
         say("ALICE", "conversation aborted before any message was sent; Mallory learned nothing")
